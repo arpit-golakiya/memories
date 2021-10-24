@@ -1,3 +1,4 @@
+// Posts Constants
 export const CREATE = 'CREATE';
 export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
@@ -10,5 +11,10 @@ export const END_LOADING = 'END_LOADING';
 export const START_LOADING = 'START_LOADING';
 export const FETCH_BY_CREATOR = 'FETCH_BY_CREATOR';
 
+// Auth Constants
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
+
+// Pins Constants
+export const CREATE_PIN = 'CREATE_PIN';
+export const FETCH_ALL_PINS = 'FETCH_ALL_PINS';

@@ -1,14 +1,18 @@
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { useEffect, useState } from "react";
 import { Room, Star, StarBorder } from "@material-ui/icons";
-import axios from "axios";
 import { format } from "timeago.js";
+import "./location.css";
+import { createPin,getPins } from '../../actions/Pins';
+import {useDispatch, useSelector} from "react-redux";
 
-function Map() {
-    const [pins, setPins] = useState([]);
+function Location() {
+    const dispatch = useDispatch();
+    const { pins, isLoading } = useSelector((state) => state?.pins);
+
+    const [_pins, setPins] = useState([]);
     const [currentPlaceId, setCurrentPlaceId] = useState(null);
     const [newPlace, setNewPlace] = useState(null);
-    console.log('newPlace---',newPlace);
     const [title, setTitle] = useState(null);
     const [desc, setDesc] = useState(null);
     const [star, setStar] = useState(0);
@@ -17,6 +21,8 @@ function Map() {
         longitude: 17.071727,
         zoom: 4,
     });
+    const user = JSON.parse(localStorage.getItem('profile'));
+
 
     const handleMarkerClick = (id, lat, long) => {
         setCurrentPlaceId(id);
@@ -40,8 +46,8 @@ function Map() {
             lat: newPlace.lat,
             long: newPlace.long,
         };
-
         try {
+            dispatch(createPin({ ...newPin, name: user?.result?.name }));
             // dispatch(createPin({ new_pin: newPin }));
 
             // const res = await axios.post("/pins", newPin);
@@ -53,15 +59,17 @@ function Map() {
     };
 
     useEffect(() => {
-        const getPins = async () => {
+        const _getPins = async () => {
             try {
-                const allPins = await axios.get("/pins");
-                setPins(allPins.data);
+                // const _pins = dispatch(getPins);
+                dispatch(getPins());
+                // console.log('_pins---',_pins);
+                // setPins(_pins.data);
             } catch (err) {
-                console.log(err);
+                console.log('err--',err);
             }
         };
-        getPins();
+        _getPins();
     }, []);
 
     return (
@@ -79,8 +87,8 @@ function Map() {
                 {pins.map((p) => (
                     <>
                         <Marker
-                            latitude={p.lat}
-                            longitude={p.long}
+                            latitude={Number(p.lat)}
+                            longitude={Number(p.long)}
                             offsetLeft={-3.5 * viewport.zoom}
                             offsetTop={-7 * viewport.zoom}
                         >
@@ -147,7 +155,7 @@ function Map() {
                             anchor="left"
                         >
                             <div>
-                                <form onSubmit={handleSubmit}>
+                                <form id="location-form" onSubmit={handleSubmit}>
                                     <label>Title</label>
                                     <input
                                         placeholder="Enter a title"
@@ -180,4 +188,4 @@ function Map() {
     );
 }
 
-export default Map;
+export default Location;
