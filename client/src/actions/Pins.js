@@ -13,7 +13,6 @@ export const getPins = () => async (dispatch) => {
 };
 
 export const createPin = (pin) => async (dispatch) => {
-    console.log('pin in Action--',pin);
         try {
         dispatch({ type: START_LOADING });
         const { data } = await api.createPin(pin);
