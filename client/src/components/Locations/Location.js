@@ -9,8 +9,6 @@ import {useDispatch, useSelector} from "react-redux";
 function Location() {
     const dispatch = useDispatch();
     const { pins, isLoading } = useSelector((state) => state?.pins);
-
-    const [_pins, setPins] = useState([]);
     const [currentPlaceId, setCurrentPlaceId] = useState(null);
     const [newPlace, setNewPlace] = useState(null);
     const [title, setTitle] = useState(null);
@@ -26,7 +24,7 @@ function Location() {
 
     const handleMarkerClick = (id, lat, long) => {
         setCurrentPlaceId(id);
-        setViewport({ ...viewport, latitude: lat, longitude: long });
+        setViewport({ ...viewport, latitude: Number(lat), longitude: Number(long) });
     };
 
     const handleAddClick = (e) => {
@@ -104,8 +102,8 @@ function Location() {
                         {p._id === currentPlaceId && (
                             <Popup
                                 key={p._id}
-                                latitude={p.lat}
-                                longitude={p.long}
+                                latitude={Number(p.lat)}
+                                longitude={Number(p.long)}
                                 closeButton={true}
                                 closeOnClick={false}
                                 onClose={() => setCurrentPlaceId(null)}
@@ -118,7 +116,7 @@ function Location() {
                                     <p className="desc">{p.desc}</p>
                                     <label>Rating</label>
                                     <div className="stars">
-                                        {Array(p.rating).fill(<Star className="star" />)}
+                                        {Array(Number(p.rating)).fill(<Star className="star" />)}
                                     </div>
                                     <label>Information</label>
                                     <span className="username">
